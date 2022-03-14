@@ -18,4 +18,8 @@ The `python` folder contains self-bootstrapping scripts for installing and confi
 
 If you already have a Python distribution, use `pip install -r requirements.txt` to install the required packages.
 
-If you don't have any Python distribution, or would like to use a self-contained environment, run the `setup.cmd` from the command-line or `setup.ps1` from Powershell to download a portable installation of Python and bootstrap the environment.
+If you don't have any Python distribution, or would like to use a self-contained environment, run the `setup.cmd` from the command-line or `setup.ps1` from PowerShell to download a portable installation of Python and bootstrap the environment.
+
+### Bonsai
+
+The `bonsai` folder contains self-bootstrapping scripts for installing and configuring a Bonsai environment for pre-processing videos and live inference. To install, run the `setup.cmd` script from the command-line.
