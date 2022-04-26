@@ -122,9 +122,13 @@ public class OrthogonalWarp
                     orthogonalTransform = CreateAffineTransform(currentTranslation, currentScale, scalePivot);
                 }
 
+                if (currentSource == null || orthogonalPlane.Width == 0 || orthogonalPlane.Height == 0)
+                {
+                    return input;
+                }
+
                 var flags = Flags;
                 var fillValue = FillValue;
-                if (currentSource == null) return input;
                 using (var orthogonalInput = input.GetSubRect(orthogonalPlane))
                 using (var orthogonalOutput = output.GetSubRect(orthogonalPlane))
                 {
