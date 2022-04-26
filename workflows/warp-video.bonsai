@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.6.0"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:p1="clr-namespace:;assembly=Extensions"
@@ -24,48 +24,12 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p1:OrthogonalWarp">
-          <p1:ScaleX>1.5</p1:ScaleX>
-          <p1:ScaleY>1.3</p1:ScaleY>
+          <p1:ScaleX>1</p1:ScaleX>
+          <p1:ScaleY>1</p1:ScaleY>
           <p1:Translation>
-            <p1:X>40</p1:X>
+            <p1:X>0</p1:X>
             <p1:Y>0</p1:Y>
           </p1:Translation>
-          <p1:Source>
-            <p1:Point2f>
-              <p1:X>517.3333</p1:X>
-              <p1:Y>469.380524</p1:Y>
-            </p1:Point2f>
-            <p1:Point2f>
-              <p1:X>424.666656</p1:X>
-              <p1:Y>623.00885</p1:Y>
-            </p1:Point2f>
-            <p1:Point2f>
-              <p1:X>856</p1:X>
-              <p1:Y>615.221252</p1:Y>
-            </p1:Point2f>
-            <p1:Point2f>
-              <p1:X>750.6667</p1:X>
-              <p1:Y>468.672577</p1:Y>
-            </p1:Point2f>
-          </p1:Source>
-          <p1:Destination>
-            <p1:Point2f>
-              <p1:X>508</p1:X>
-              <p1:Y>471</p1:Y>
-            </p1:Point2f>
-            <p1:Point2f>
-              <p1:X>420</p1:X>
-              <p1:Y>594</p1:Y>
-            </p1:Point2f>
-            <p1:Point2f>
-              <p1:X>988</p1:X>
-              <p1:Y>588</p1:Y>
-            </p1:Point2f>
-            <p1:Point2f>
-              <p1:X>848</p1:X>
-              <p1:Y>471</p1:Y>
-            </p1:Point2f>
-          </p1:Destination>
           <p1:Flags>Linear</p1:Flags>
           <p1:FillValue>
             <p1:Val0>0</p1:Val0>
