@@ -1,24 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
-<WorkflowBuilder Version="2.6.3"
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.6.0"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns:p1="clr-namespace:;assembly=Extensions"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
-      <Expression xsi:type="ExternalizedMapping">
-        <Property Name="StartPosition" DisplayName="StartVideo1" />
-      </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="cv:FileCapture">
-          <cv:FileName>Session5.mov</cv:FileName>
-          <cv:PlaybackRate>0</cv:PlaybackRate>
-          <cv:StartPosition>118</cv:StartPosition>
-          <cv:PositionUnits>Frames</cv:PositionUnits>
-          <cv:Loop>false</cv:Loop>
-          <cv:Playing>true</cv:Playing>
+        <Combinator xsi:type="p1:ReferenceFileCapture">
+          <p1:FileName>referencevideo.mov</p1:FileName>
+          <p1:PlaybackRate>0</p1:PlaybackRate>
+          <p1:StartPosition>0</p1:StartPosition>
+          <p1:PositionUnits>Milliseconds</p1:PositionUnits>
+          <p1:Loop>false</p1:Loop>
+          <p1:Playing>true</p1:Playing>
+          <p1:FocusFileName>focusvideo.avi</p1:FocusFileName>
+          <p1:Offset>0</p1:Offset>
         </Combinator>
+      </Expression>
+      <Expression xsi:type="MemberSelector">
+        <Selector>ReferenceFrame</Selector>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p1:OrthogonalWarp">
@@ -73,25 +75,15 @@
           </p1:FillValue>
         </Combinator>
       </Expression>
-      <Expression xsi:type="ExternalizedMapping">
-        <Property Name="StartPosition" DisplayName="StartVideo2" />
+      <Expression xsi:type="MemberSelector">
+        <Selector>FocusFrame</Selector>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="cv:FileCapture">
-          <cv:FileName>referencevideo.avi</cv:FileName>
-          <cv:PlaybackRate>0</cv:PlaybackRate>
-          <cv:StartPosition>0</cv:StartPosition>
-          <cv:PositionUnits>Frames</cv:PositionUnits>
-          <cv:Loop>false</cv:Loop>
-          <cv:Playing>true</cv:Playing>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:WithLatestFrom" />
+        <Combinator xsi:type="rx:Zip" />
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p1:AlphaBlend">
-          <p1:Alpha>0.51162790697674421</p1:Alpha>
+          <p1:Alpha>0</p1:Alpha>
         </Combinator>
       </Expression>
       <Expression xsi:type="Disable">
@@ -117,13 +109,13 @@
     </Nodes>
     <Edges>
       <Edge From="0" To="1" Label="Source1" />
+      <Edge From="0" To="3" Label="Source1" />
       <Edge From="1" To="2" Label="Source1" />
-      <Edge From="2" To="5" Label="Source1" />
-      <Edge From="3" To="4" Label="Source1" />
-      <Edge From="4" To="5" Label="Source2" />
+      <Edge From="2" To="4" Label="Source1" />
+      <Edge From="3" To="4" Label="Source2" />
+      <Edge From="4" To="5" Label="Source1" />
       <Edge From="5" To="6" Label="Source1" />
       <Edge From="6" To="7" Label="Source1" />
-      <Edge From="7" To="8" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
