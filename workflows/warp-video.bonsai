@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.6.3"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
@@ -22,10 +22,8 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p1:OrthogonalWarp">
-          <p1:Scale>
-            <p1:X>1.5</p1:X>
-            <p1:Y>1.4</p1:Y>
-          </p1:Scale>
+          <p1:ScaleX>1.5</p1:ScaleX>
+          <p1:ScaleY>1.3</p1:ScaleY>
           <p1:Translation>
             <p1:X>40</p1:X>
             <p1:Y>0</p1:Y>

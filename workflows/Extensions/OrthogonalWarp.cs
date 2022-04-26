@@ -13,19 +13,33 @@ public class OrthogonalWarp
     public OrthogonalWarp()
     {
         Flags = WarpFlags.Linear;
-        Scale = new Point2f(1, 1);
+        ScaleX = ScaleY = 1;
     }
 
-    [Description("The scale factor to apply to the orthogonal image plane.")]
-    public Point2f Scale { get; set; }
+    [Range(0.5, 1.5)]
+    [Precision(3, 0.05)]
+    [Category("AffineTransform")]
+    [Editor(DesignTypes.SliderEditor, DesignTypes.UITypeEditor)]
+    [Description("The horizontal scale factor to apply to the orthogonal image plane.")]
+    public float ScaleX { get; set; }
 
+    [Range(0.5, 1.5)]
+    [Precision(3, 0.05)]
+    [Category("AffineTransform")]
+    [Editor(DesignTypes.SliderEditor, DesignTypes.UITypeEditor)]
+    [Description("The horizontal scale factor to apply to the orthogonal image plane.")]
+    public float ScaleY { get; set; }
+
+    [Category("AffineTransform")]
     [Description("The translation vector to apply to the orthogonal image plane.")]
     public Point2f Translation { get; set; }
 
+    [Category("PerspectiveTransform")]
     [Description("The coordinates of the four source quadrangle vertices in the input image.")]
     [Editor("Bonsai.Vision.Design.IplImageInputQuadrangleEditor, Bonsai.Vision.Design", DesignTypes.UITypeEditor)]
     public Point2f[] Source { get; set; }
 
+    [Category("PerspectiveTransform")]
     [Description("The coordinates of the four corresponding quadrangle vertices in the output image.")]
     [Editor("Bonsai.Vision.Design.IplImageOutputQuadrangleEditor, Bonsai.Vision.Design", DesignTypes.UITypeEditor)]
     public Point2f[] Destination { get; set; }
@@ -74,6 +88,7 @@ public class OrthogonalWarp
             var mapMatrix = new Mat(3, 3, Depth.F32, 1);
             return source.Select(input =>
             {
+                var scale = new Point2f(ScaleX, ScaleY);
                 var output = new IplImage(input.Size, input.Depth, input.Channels);
                 Source = Source ?? InitializeQuadrangle(output);
                 Destination = Destination ?? InitializeQuadrangle(output);
@@ -96,9 +111,9 @@ public class OrthogonalWarp
                     CV.GetPerspectiveTransform(correctedSource, correctedDestination, mapMatrix);
                 }
 
-                if (currentScale != Scale || currentTranslation != Translation)
+                if (currentScale != scale || currentTranslation != Translation)
                 {
-                    currentScale = Scale;
+                    currentScale = scale;
                     currentTranslation = Translation;
 
                     // to scale height pivot is set to the edge of orthogonal plane
