@@ -90,6 +90,7 @@ public class OrthogonalWarp
             {
                 var scale = new Point2f(ScaleX, ScaleY);
                 var output = new IplImage(input.Size, input.Depth, input.Channels);
+                output.SetZero();
                 Source = Source ?? InitializeQuadrangle(output);
                 Destination = Destination ?? InitializeQuadrangle(output);
 
@@ -111,6 +112,7 @@ public class OrthogonalWarp
                     CV.GetPerspectiveTransform(correctedSource, correctedDestination, mapMatrix);
                 }
 
+                var targetOrthogonalPlane = orthogonalPlane;
                 if (currentScale != scale || currentTranslation != Translation)
                 {
                     currentScale = scale;
@@ -119,9 +121,11 @@ public class OrthogonalWarp
                     // to scale height pivot is set to the edge of orthogonal plane
                     // horizontal scale default is image mid-point
                     var scalePivot = new Point2f(input.Width / 2, orthogonalPlane.Height);
-                    orthogonalTransform = CreateAffineTransform(currentTranslation, currentScale, scalePivot);
+                    orthogonalTransform = CreateAffineTransform(new Point2f(currentTranslation.X, 0), currentScale, scalePivot);
                 }
 
+                targetOrthogonalPlane.Y += (int)currentTranslation.Y;
+                // targetOrthogonalPlane.Height = (int)Math.Min(output.Height - targetOrthogonalPlane.Y, targetOrthogonalPlane.Height * currentScale.Y);
                 if (currentSource == null || orthogonalPlane.Width == 0 || orthogonalPlane.Height == 0)
                 {
                     return input;
@@ -129,18 +133,18 @@ public class OrthogonalWarp
 
                 var flags = Flags;
                 var fillValue = FillValue;
-                using (var orthogonalInput = input.GetSubRect(orthogonalPlane))
-                using (var orthogonalOutput = output.GetSubRect(orthogonalPlane))
-                {
-                    // affine warp "vertical" pixels
-                    CV.WarpAffine(orthogonalInput, orthogonalOutput, orthogonalTransform, flags | WarpFlags.FillOutliers, fillValue);
-                }
-
                 using (var groundInput = input.GetSubRect(groundPlane))
                 using (var groundOutput = output.GetSubRect(groundPlane))
                 {
                     // perspective warp "floor" pixels
                     CV.WarpPerspective(groundInput, groundOutput, mapMatrix, flags | WarpFlags.FillOutliers, fillValue);
+                }
+
+                using (var orthogonalInput = input.GetSubRect(orthogonalPlane))
+                using (var orthogonalOutput = output.GetSubRect(targetOrthogonalPlane))
+                {
+                    // affine warp "vertical" pixels
+                    CV.WarpAffine(orthogonalInput, orthogonalOutput, orthogonalTransform, flags | WarpFlags.FillOutliers, fillValue);
                 }
 
                 return output;
