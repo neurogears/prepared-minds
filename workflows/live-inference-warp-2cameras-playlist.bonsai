@@ -1,0 +1,721 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.6.3"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:vid="clr-namespace:Bonsai.Video;assembly=Bonsai.Video"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns:dlc="clr-namespace:Bonsai.DeepLabCut;assembly=Bonsai.DeepLabCut"
+                 xmlns:wie="clr-namespace:Bonsai.Windows.Input;assembly=Bonsai.Windows.Input"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="vid:VideoCaptureDevice">
+          <vid:Index>0</vid:Index>
+          <vid:Format>
+            <vid:FrameSize>
+              <vid:Width>1280</vid:Width>
+              <vid:Height>720</vid:Height>
+            </vid:FrameSize>
+            <vid:AverageFrameRate>30</vid:AverageFrameRate>
+            <vid:MaximumFrameRate>30</vid:MaximumFrameRate>
+            <vid:BitCount>24</vid:BitCount>
+          </vid:Format>
+          <vid:CaptureProperties />
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:Flip">
+          <cv:Mode>Horizontal</cv:Mode>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="GroupWorkflow">
+        <Name>GreenCamera</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="IncludeWorkflow" Path="Extensions\MovieSource.bonsai">
+          <FileName>testvideos\t1\green-test.avi</FileName>
+          <StartPosition>0</StartPosition>
+          <Playing>true</Playing>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\Superimpose.bonsai">
+        <Reference>ReferenceVideo</Reference>
+        <Focal>GreenVideo</Focal>
+        <ScaleX>1.302</ScaleX>
+        <ScaleY>1.43</ScaleY>
+        <Translation>
+          <X>-60</X>
+          <Y>147</Y>
+        </Translation>
+        <Source>
+          <Point2f>
+            <X>508.5</X>
+            <Y>392.923553</Y>
+          </Point2f>
+          <Point2f>
+            <X>445</X>
+            <Y>545.6672</Y>
+          </Point2f>
+          <Point2f>
+            <X>918.7822</X>
+            <Y>534.5455</Y>
+          </Point2f>
+          <Point2f>
+            <X>831.5</X>
+            <Y>386.446777</Y>
+          </Point2f>
+        </Source>
+        <Destination>
+          <Point2f>
+            <X>409.6</X>
+            <Y>536.926</Y>
+          </Point2f>
+          <Point2f>
+            <X>246.594986</X>
+            <Y>676.2162</Y>
+          </Point2f>
+          <Point2f>
+            <X>943.9426</X>
+            <Y>677.027039</Y>
+          </Point2f>
+          <Point2f>
+            <X>831.624268</X>
+            <Y>533.7931</Y>
+          </Point2f>
+        </Destination>
+        <Alpha>0.4</Alpha>
+        <Mask>
+          <ArrayOfPoint>
+            <Point>
+              <X>276</X>
+              <Y>0</Y>
+            </Point>
+            <Point>
+              <X>1032</X>
+              <Y>0</Y>
+            </Point>
+            <Point>
+              <X>1032</X>
+              <Y>719</Y>
+            </Point>
+            <Point>
+              <X>276</X>
+              <Y>719</Y>
+            </Point>
+          </ArrayOfPoint>
+        </Mask>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="vid:VideoCaptureDevice">
+          <vid:Index>1</vid:Index>
+          <vid:Format>
+            <vid:FrameSize>
+              <vid:Width>1280</vid:Width>
+              <vid:Height>720</vid:Height>
+            </vid:FrameSize>
+            <vid:AverageFrameRate>30</vid:AverageFrameRate>
+            <vid:MaximumFrameRate>30</vid:MaximumFrameRate>
+            <vid:BitCount>24</vid:BitCount>
+          </vid:Format>
+          <vid:CaptureProperties />
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:Flip">
+          <cv:Mode>Horizontal</cv:Mode>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="GroupWorkflow">
+        <Name>BlueCamera</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="IncludeWorkflow" Path="Extensions\MovieSource.bonsai">
+          <FileName>testvideos\t1\blue-test.avi</FileName>
+          <StartPosition>0</StartPosition>
+          <Playing>true</Playing>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\Superimpose.bonsai">
+        <Reference>ReferenceVideo</Reference>
+        <Focal>BlueVideo</Focal>
+        <ScaleX>1.3</ScaleX>
+        <ScaleY>1.43</ScaleY>
+        <Translation>
+          <X>-23</X>
+          <Y>73</Y>
+        </Translation>
+        <Source>
+          <Point2f>
+            <X>478.402283</X>
+            <Y>465.503357</Y>
+          </Point2f>
+          <Point2f>
+            <X>395.320984</X>
+            <Y>620.9396</Y>
+          </Point2f>
+          <Point2f>
+            <X>880.114136</X>
+            <Y>623.3557</Y>
+          </Point2f>
+          <Point2f>
+            <X>803.4237</X>
+            <Y>465.503357</Y>
+          </Point2f>
+        </Source>
+        <Destination>
+          <Point2f>
+            <X>409.6</X>
+            <Y>536.926</Y>
+          </Point2f>
+          <Point2f>
+            <X>244.184616</X>
+            <Y>673.5484</Y>
+          </Point2f>
+          <Point2f>
+            <X>935.384644</X>
+            <Y>677.647034</Y>
+          </Point2f>
+          <Point2f>
+            <X>829.373657</X>
+            <Y>536.191833</Y>
+          </Point2f>
+        </Destination>
+        <Alpha>0.4</Alpha>
+        <Mask>
+          <ArrayOfPoint>
+            <Point>
+              <X>228</X>
+              <Y>33</Y>
+            </Point>
+            <Point>
+              <X>1028</X>
+              <Y>33</Y>
+            </Point>
+            <Point>
+              <X>1028</X>
+              <Y>719</Y>
+            </Point>
+            <Point>
+              <X>228</X>
+              <Y>719</Y>
+            </Point>
+          </ArrayOfPoint>
+        </Mask>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>GreenVideo</Name>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="dlc:PredictPose">
+            <dlc:ModelFileName>Models\snapshot-500000.pb</dlc:ModelFileName>
+            <dlc:PoseConfigFileName>Models\pose_cfg.yaml</dlc:PoseConfigFileName>
+            <dlc:MinConfidence>0.4</dlc:MinConfidence>
+            <dlc:ScaleFactor>0.5</dlc:ScaleFactor>
+            <dlc:ColorConversion>Bgr2Rgb</dlc:ColorConversion>
+          </Combinator>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>BlueVideo</Name>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="dlc:PredictPose">
+            <dlc:ModelFileName>Models\snapshot-500000.pb</dlc:ModelFileName>
+            <dlc:PoseConfigFileName>Models\pose_cfg.yaml</dlc:PoseConfigFileName>
+            <dlc:MinConfidence>0.4</dlc:MinConfidence>
+            <dlc:ScaleFactor>0.5</dlc:ScaleFactor>
+            <dlc:ColorConversion>Bgr2Rgb</dlc:ColorConversion>
+          </Combinator>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="wie:KeyDown">
+          <wie:Filter>D1</wie:Filter>
+          <wie:SuppressRepetitions>true</wie:SuppressRepetitions>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="CreateObservable">
+        <Name>ATownStomp</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="FileName" />
+              <Property Name="ScaleX" />
+              <Property Name="ScaleY" />
+              <Property Name="Source" />
+              <Property Name="Destination" />
+              <Property Name="Offset" />
+              <Property Name="Fps" />
+              <Property Name="SampleRate" />
+              <Property Name="ScaleAudio" />
+              <Property Name="Translation" />
+              <Property Name="Playing" />
+              <Property Name="StartPosition" />
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\ReferenceVideo.bonsai">
+              <FileName>Videos\Stefan_ATownStomp_2FixationFlipped.mp4</FileName>
+              <ScaleX>1</ScaleX>
+              <ScaleY>1</ScaleY>
+              <Source>
+                <Point2f>
+                  <X>450.666656</X>
+                  <Y>538.8079</Y>
+                </Point2f>
+                <Point2f>
+                  <X>335.333344</X>
+                  <Y>694.1154</Y>
+                </Point2f>
+                <Point2f>
+                  <X>980</X>
+                  <Y>695.4778</Y>
+                </Point2f>
+                <Point2f>
+                  <X>868.6667</X>
+                  <Y>538.8079</Y>
+                </Point2f>
+              </Source>
+              <Destination>
+                <Point2f>
+                  <X>452</X>
+                  <Y>538.1268</Y>
+                </Point2f>
+                <Point2f>
+                  <X>290.666656</X>
+                  <Y>672.3179</Y>
+                </Point2f>
+                <Point2f>
+                  <X>982</X>
+                  <Y>677.7673</Y>
+                </Point2f>
+                <Point2f>
+                  <X>872.6667</X>
+                  <Y>537.4456</Y>
+                </Point2f>
+              </Destination>
+              <Offset>
+                <X>0</X>
+                <Y>0</Y>
+              </Offset>
+              <Fps>29.97</Fps>
+              <SampleRate>48000</SampleRate>
+              <ScaleAudio>0.1</ScaleAudio>
+              <Translation>
+                <X>0</X>
+                <Y>0</Y>
+              </Translation>
+              <Playing>true</Playing>
+              <StartPosition>0</StartPosition>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="wie:KeyDown">
+          <wie:Filter>D2</wie:Filter>
+          <wie:SuppressRepetitions>true</wie:SuppressRepetitions>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="CreateObservable">
+        <Name>Rooftop</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="FileName" />
+              <Property Name="ScaleX" />
+              <Property Name="ScaleY" />
+              <Property Name="Source" />
+              <Property Name="Destination" />
+              <Property Name="Offset" />
+              <Property Name="Fps" />
+              <Property Name="SampleRate" />
+              <Property Name="ScaleAudio" />
+              <Property Name="Translation" />
+              <Property Name="Playing" />
+              <Property Name="StartPosition" />
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\ReferenceVideo.bonsai">
+              <FileName>Videos\Stefan_Rooftop_2FixationFlipped.mp4</FileName>
+              <ScaleX>0.922</ScaleX>
+              <ScaleY>0.915</ScaleY>
+              <Source>
+                <Point2f>
+                  <X>393</X>
+                  <Y>540.8096</Y>
+                </Point2f>
+                <Point2f>
+                  <X>272</X>
+                  <Y>710.8246</Y>
+                </Point2f>
+                <Point2f>
+                  <X>972.5</X>
+                  <Y>710.284851</Y>
+                </Point2f>
+                <Point2f>
+                  <X>848.5</X>
+                  <Y>540.8096</Y>
+                </Point2f>
+              </Source>
+              <Destination>
+                <Point2f>
+                  <X>417.1683</X>
+                  <Y>539.0674</Y>
+                </Point2f>
+                <Point2f>
+                  <X>256.455933</X>
+                  <Y>668.704651</Y>
+                </Point2f>
+                <Point2f>
+                  <X>932.359741</X>
+                  <Y>673.367859</Y>
+                </Point2f>
+                <Point2f>
+                  <X>835.4764</X>
+                  <Y>539.0674</Y>
+                </Point2f>
+              </Destination>
+              <Offset>
+                <X>0</X>
+                <Y>0</Y>
+              </Offset>
+              <Fps>29.97</Fps>
+              <SampleRate>48000</SampleRate>
+              <ScaleAudio>0.1</ScaleAudio>
+              <Translation>
+                <X>2</X>
+                <Y>25</Y>
+              </Translation>
+              <Playing>true</Playing>
+              <StartPosition>0</StartPosition>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="wie:KeyDown">
+          <wie:Filter>D3</wie:Filter>
+          <wie:SuppressRepetitions>true</wie:SuppressRepetitions>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="CreateObservable">
+        <Name>Smurf</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="FileName" />
+              <Property Name="ScaleX" />
+              <Property Name="ScaleY" />
+              <Property Name="Source" />
+              <Property Name="Destination" />
+              <Property Name="Offset" />
+              <Property Name="Fps" />
+              <Property Name="SampleRate" />
+              <Property Name="ScaleAudio" />
+              <Property Name="Translation" />
+              <Property Name="Playing" />
+              <Property Name="StartPosition" />
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\ReferenceVideo.bonsai">
+              <FileName>Videos\Stefan_Smurf_2FixationFlipped.mp4</FileName>
+              <ScaleX>1</ScaleX>
+              <ScaleY>1.05</ScaleY>
+              <Source>
+                <Point2f>
+                  <X>419.5</X>
+                  <Y>537.0315</Y>
+                </Point2f>
+                <Point2f>
+                  <X>312.5</X>
+                  <Y>689.2354</Y>
+                </Point2f>
+                <Point2f>
+                  <X>938</X>
+                  <Y>688.6957</Y>
+                </Point2f>
+                <Point2f>
+                  <X>827</X>
+                  <Y>536.49176</Y>
+                </Point2f>
+              </Source>
+              <Destination>
+                <Point2f>
+                  <X>414.4762</X>
+                  <Y>536.426331</Y>
+                </Point2f>
+                <Point2f>
+                  <X>253.333328</X>
+                  <Y>673.1707</Y>
+                </Point2f>
+                <Point2f>
+                  <X>941.3333</X>
+                  <Y>677.0732</Y>
+                </Point2f>
+                <Point2f>
+                  <X>824.8889</X>
+                  <Y>536.426331</Y>
+                </Point2f>
+              </Destination>
+              <Offset>
+                <X>-2</X>
+                <Y>0</Y>
+              </Offset>
+              <Fps>29.97</Fps>
+              <SampleRate>48000</SampleRate>
+              <ScaleAudio>0.1</ScaleAudio>
+              <Translation>
+                <X>3</X>
+                <Y>-10</Y>
+              </Translation>
+              <Playing>true</Playing>
+              <StartPosition>0</StartPosition>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="wie:KeyDown">
+          <wie:Filter>D4</wie:Filter>
+          <wie:SuppressRepetitions>true</wie:SuppressRepetitions>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="CreateObservable">
+        <Name>Diagonal</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="FileName" />
+              <Property Name="ScaleX" />
+              <Property Name="ScaleY" />
+              <Property Name="Source" />
+              <Property Name="Destination" />
+              <Property Name="Offset" />
+              <Property Name="Fps" />
+              <Property Name="SampleRate" />
+              <Property Name="ScaleAudio" />
+              <Property Name="Translation" />
+              <Property Name="Playing" />
+              <Property Name="StartPosition" />
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\ReferenceVideo.bonsai">
+              <FileName>Videos\Nina_Diagonal1_2FixationFlipped.mp4</FileName>
+              <ScaleX>0.981</ScaleX>
+              <ScaleY>1</ScaleY>
+              <Source>
+                <Point2f>
+                  <X>465.5</X>
+                  <Y>521.919067</Y>
+                </Point2f>
+                <Point2f>
+                  <X>322</X>
+                  <Y>698.410767</Y>
+                </Point2f>
+                <Point2f>
+                  <X>997.5</X>
+                  <Y>695.712158</Y>
+                </Point2f>
+                <Point2f>
+                  <X>894.5</X>
+                  <Y>514.3628</Y>
+                </Point2f>
+              </Source>
+              <Destination>
+                <Point2f>
+                  <X>413.862549</X>
+                  <Y>538.8506</Y>
+                </Point2f>
+                <Point2f>
+                  <X>252.77832</X>
+                  <Y>671.264343</Y>
+                </Point2f>
+                <Point2f>
+                  <X>936.7667</X>
+                  <Y>675.862061</Y>
+                </Point2f>
+                <Point2f>
+                  <X>833.9206</X>
+                  <Y>536.092</Y>
+                </Point2f>
+              </Destination>
+              <Offset>
+                <X>-55</X>
+                <Y>22</Y>
+              </Offset>
+              <Fps>25</Fps>
+              <SampleRate>48000</SampleRate>
+              <ScaleAudio>0.1</ScaleAudio>
+              <Translation>
+                <X>0</X>
+                <Y>0</Y>
+              </Translation>
+              <Playing>true</Playing>
+              <StartPosition>0</StartPosition>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="wie:KeyDown">
+          <wie:Filter>D5</wie:Filter>
+          <wie:SuppressRepetitions>true</wie:SuppressRepetitions>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="CreateObservable">
+        <Name>BalletAdvanced</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="FileName" />
+              <Property Name="ScaleX" />
+              <Property Name="ScaleY" />
+              <Property Name="Source" />
+              <Property Name="Destination" />
+              <Property Name="Offset" />
+              <Property Name="Fps" />
+              <Property Name="SampleRate" />
+              <Property Name="ScaleAudio" />
+              <Property Name="Translation" />
+              <Property Name="Playing" />
+              <Property Name="StartPosition" />
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\ReferenceVideo.bonsai">
+              <FileName>Videos\Raymond_Advanced_2FixationFlipped.mp4</FileName>
+              <ScaleX>0.959</ScaleX>
+              <ScaleY>1</ScaleY>
+              <Source>
+                <Point2f>
+                  <X>465</X>
+                  <Y>498.170929</Y>
+                </Point2f>
+                <Point2f>
+                  <X>351.648346</X>
+                  <Y>673.2</Y>
+                </Point2f>
+                <Point2f>
+                  <X>1057.28943</X>
+                  <Y>692.4</Y>
+                </Point2f>
+                <Point2f>
+                  <X>902.5641</X>
+                  <Y>501.6</Y>
+                </Point2f>
+              </Source>
+              <Destination>
+                <Point2f>
+                  <X>415.10672</X>
+                  <Y>535.7191</Y>
+                </Point2f>
+                <Point2f>
+                  <X>250.666672</X>
+                  <Y>671.2195</Y>
+                </Point2f>
+                <Point2f>
+                  <X>944</X>
+                  <Y>679.0244</Y>
+                </Point2f>
+                <Point2f>
+                  <X>834.6667</X>
+                  <Y>538.53656</Y>
+                </Point2f>
+              </Destination>
+              <Offset>
+                <X>-55</X>
+                <Y>38</Y>
+              </Offset>
+              <Fps>25</Fps>
+              <SampleRate>48000</SampleRate>
+              <ScaleAudio>0.1</ScaleAudio>
+              <Translation>
+                <X>0</X>
+                <Y>0</Y>
+              </Translation>
+              <Playing>true</Playing>
+              <StartPosition>0</StartPosition>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Merge" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Switch" />
+      </Expression>
+      <Expression xsi:type="PublishSubject">
+        <Name>ReferenceVideo</Name>
+      </Expression>
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="1" To="2" Label="Source1" />
+      <Edge From="2" To="3" Label="Source1" />
+      <Edge From="3" To="4" Label="Source1" />
+      <Edge From="5" To="6" Label="Source1" />
+      <Edge From="6" To="7" Label="Source1" />
+      <Edge From="7" To="8" Label="Source1" />
+      <Edge From="8" To="9" Label="Source1" />
+      <Edge From="10" To="11" Label="Source1" />
+      <Edge From="12" To="13" Label="Source1" />
+      <Edge From="14" To="15" Label="Source1" />
+      <Edge From="15" To="24" Label="Source1" />
+      <Edge From="16" To="17" Label="Source1" />
+      <Edge From="17" To="24" Label="Source2" />
+      <Edge From="18" To="19" Label="Source1" />
+      <Edge From="19" To="24" Label="Source3" />
+      <Edge From="20" To="21" Label="Source1" />
+      <Edge From="21" To="24" Label="Source4" />
+      <Edge From="22" To="23" Label="Source1" />
+      <Edge From="23" To="24" Label="Source5" />
+      <Edge From="24" To="25" Label="Source1" />
+      <Edge From="25" To="26" Label="Source1" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>

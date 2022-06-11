@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.6.3"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:scr="clr-namespace:Bonsai.Scripting;assembly=Bonsai.Scripting"
+                 xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
+                 xmlns:al="clr-namespace:Bonsai.Audio;assembly=Bonsai.Audio"
+                 xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
+                 xmlns:p1="clr-namespace:;assembly=Extensions"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Value" DisplayName="FileName" />
+      </Expression>
+      <Expression xsi:type="PropertySource" TypeArguments="cv:FileCapture,sys:String">
+        <MemberName>FileName</MemberName>
+        <Value />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Take">
+          <rx:Count>1</rx:Count>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="AsyncSubject">
+        <Name>FileName</Name>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="ScaleX" />
+        <Property Name="ScaleY" />
+        <Property Name="Source" />
+        <Property Name="Destination" />
+        <Property Name="Translation" DisplayName="Offset" />
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Value" DisplayName="Fps" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="DoubleProperty">
+          <Value>25</Value>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="scr:ExpressionTransform">
+        <scr:Expression>1000.0 / it</scr:Expression>
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="BufferLength" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="SampleRate" />
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>FileName</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="io:GetDirectoryName" />
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>FileName</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="io:GetFileNameWithoutExtension" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Zip" />
+      </Expression>
+      <Expression xsi:type="Format">
+        <Format>{0}\{1}.wav</Format>
+        <Selector>Item1,Item2</Selector>
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="FileName" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="al:AudioReader">
+          <al:FileName />
+          <al:BufferLength>40</al:BufferLength>
+          <al:SampleRate>48000</al:SampleRate>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>FileName</Name>
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="FileName" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Scale" DisplayName="ScaleAudio" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="dsp:ConvertScale">
+          <dsp:Depth xsi:nil="true" />
+          <dsp:Scale>1</dsp:Scale>
+          <dsp:Shift>0</dsp:Shift>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="al:AudioPlayback">
+          <al:SampleRate>48000</al:SampleRate>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Offset" DisplayName="Translation" Category="AffineTransform" />
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Playing" />
+        <Property Name="StartPosition" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:FileCapture">
+          <cv:FileName />
+          <cv:PlaybackRate>0</cv:PlaybackRate>
+          <cv:StartPosition>0</cv:StartPosition>
+          <cv:PositionUnits>Frames</cv:PositionUnits>
+          <cv:Loop>false</cv:Loop>
+          <cv:Playing>true</cv:Playing>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:Flip">
+          <cv:Mode>Horizontal</cv:Mode>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="dsp:Shift">
+          <dsp:Offset>
+            <dsp:X>0</dsp:X>
+            <dsp:Y>0</dsp:Y>
+          </dsp:Offset>
+          <dsp:BorderType>Constant</dsp:BorderType>
+          <dsp:FillValue>
+            <dsp:Val0>0</dsp:Val0>
+            <dsp:Val1>0</dsp:Val1>
+            <dsp:Val2>0</dsp:Val2>
+            <dsp:Val3>0</dsp:Val3>
+          </dsp:FillValue>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:OrthogonalWarp">
+          <p1:ScaleX>1</p1:ScaleX>
+          <p1:ScaleY>1</p1:ScaleY>
+          <p1:Translation>
+            <p1:X>0</p1:X>
+            <p1:Y>0</p1:Y>
+          </p1:Translation>
+          <p1:Flags>Linear</p1:Flags>
+          <p1:FillValue>
+            <p1:Val0>0</p1:Val0>
+            <p1:Val1>0</p1:Val1>
+            <p1:Val2>0</p1:Val2>
+            <p1:Val3>0</p1:Val3>
+          </p1:FillValue>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="WorkflowOutput" />
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="1" To="2" Label="Source1" />
+      <Edge From="2" To="3" Label="Source1" />
+      <Edge From="4" To="28" Label="Source2" />
+      <Edge From="5" To="6" Label="Source1" />
+      <Edge From="6" To="7" Label="Source1" />
+      <Edge From="7" To="8" Label="Source1" />
+      <Edge From="8" To="17" Label="Source1" />
+      <Edge From="9" To="22" Label="Source2" />
+      <Edge From="9" To="17" Label="Source3" />
+      <Edge From="10" To="11" Label="Source1" />
+      <Edge From="11" To="14" Label="Source1" />
+      <Edge From="12" To="13" Label="Source1" />
+      <Edge From="13" To="14" Label="Source2" />
+      <Edge From="14" To="15" Label="Source1" />
+      <Edge From="15" To="16" Label="Source1" />
+      <Edge From="16" To="17" Label="Source2" />
+      <Edge From="17" To="21" Label="Source1" />
+      <Edge From="18" To="19" Label="Source1" />
+      <Edge From="19" To="25" Label="Source2" />
+      <Edge From="20" To="21" Label="Source2" />
+      <Edge From="21" To="22" Label="Source1" />
+      <Edge From="22" To="25" Label="Source1" />
+      <Edge From="23" To="27" Label="Source2" />
+      <Edge From="24" To="25" Label="Source3" />
+      <Edge From="25" To="26" Label="Source1" />
+      <Edge From="26" To="27" Label="Source1" />
+      <Edge From="27" To="28" Label="Source1" />
+      <Edge From="28" To="29" Label="Source1" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>
