@@ -2,8 +2,11 @@
 <WorkflowBuilder Version="2.6.3"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
-                 xmlns:p1="clr-namespace:;assembly=Extensions"
+                 xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
+                 xmlns:p1="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
+                 xmlns:scr="clr-namespace:Bonsai.Scripting;assembly=Bonsai.Scripting"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:p2="clr-namespace:;assembly=Extensions"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Description>Corrects and superimposes a focal video on a reference video and publishes a live stream of the corrected video.</Description>
   <Workflow>
@@ -30,35 +33,99 @@
       <Expression xsi:type="ExternalizedMapping">
         <Property Name="Regions" DisplayName="Mask" Category="Blend" />
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="cv:MaskPolygon">
-          <cv:MaskType>ToZero</cv:MaskType>
-          <cv:FillValue>
-            <cv:Val0>0</cv:Val0>
-            <cv:Val1>0</cv:Val1>
-            <cv:Val2>0</cv:Val2>
-            <cv:Val3>0</cv:Val3>
-          </cv:FillValue>
-        </Combinator>
+      <Expression xsi:type="GroupWorkflow">
+        <Name>ConditionalMask</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="cv:Grayscale" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="dsp:Average" />
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Val0</Selector>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" DisplayName="Regions" />
+            </Expression>
+            <Expression xsi:type="PropertySource" TypeArguments="cv:MaskPolygon,p1:Point[][]">
+              <MemberName>Regions</MemberName>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" />
+            </Expression>
+            <Expression xsi:type="GreaterThan">
+              <Operand xsi:type="DoubleProperty">
+                <Value>40</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="PropertySource" TypeArguments="cv:MaskPolygon,p1:Point[][]">
+              <MemberName>Regions</MemberName>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:CombineLatest" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>Item1 ? Item2 : Item3</scr:Expression>
+            </Expression>
+            <Expression xsi:type="PropertyMapping">
+              <PropertyMappings>
+                <Property Name="Regions" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="cv:MaskPolygon">
+                <cv:MaskType>ToZero</cv:MaskType>
+                <cv:FillValue>
+                  <cv:Val0>0</cv:Val0>
+                  <cv:Val1>0</cv:Val1>
+                  <cv:Val2>0</cv:Val2>
+                  <cv:Val3>0</cv:Val3>
+                </cv:FillValue>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="12" Label="Source1" />
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
+            <Edge From="3" To="7" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="9" Label="Source2" />
+            <Edge From="6" To="7" Label="Source2" />
+            <Edge From="7" To="9" Label="Source1" />
+            <Edge From="8" To="9" Label="Source3" />
+            <Edge From="9" To="10" Label="Source1" />
+            <Edge From="10" To="11" Label="Source1" />
+            <Edge From="11" To="12" Label="Source2" />
+            <Edge From="12" To="13" Label="Source1" />
+          </Edges>
+        </Workflow>
       </Expression>
       <Expression xsi:type="WorkflowInput">
         <Name>Source1</Name>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="p1:OrthogonalWarp">
-          <p1:ScaleX>1</p1:ScaleX>
-          <p1:ScaleY>1</p1:ScaleY>
-          <p1:Translation>
-            <p1:X>0</p1:X>
-            <p1:Y>0</p1:Y>
-          </p1:Translation>
-          <p1:Flags>Linear</p1:Flags>
-          <p1:FillValue>
-            <p1:Val0>0</p1:Val0>
-            <p1:Val1>0</p1:Val1>
-            <p1:Val2>0</p1:Val2>
-            <p1:Val3>0</p1:Val3>
-          </p1:FillValue>
+        <Combinator xsi:type="p2:OrthogonalWarp">
+          <p2:ScaleX>1</p2:ScaleX>
+          <p2:ScaleY>1</p2:ScaleY>
+          <p2:Translation>
+            <p2:X>0</p2:X>
+            <p2:Y>0</p2:Y>
+          </p2:Translation>
+          <p2:Flags>Linear</p2:Flags>
+          <p2:FillValue>
+            <p2:Val0>0</p2:Val0>
+            <p2:Val1>0</p2:Val1>
+            <p2:Val2>0</p2:Val2>
+            <p2:Val3>0</p2:Val3>
+          </p2:FillValue>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -79,8 +146,8 @@
         <Combinator xsi:type="rx:WithLatestFrom" />
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="p1:AlphaBlend">
-          <p1:Alpha>0.4</p1:Alpha>
+        <Combinator xsi:type="p2:AlphaBlend">
+          <p2:Alpha>0.4</p2:Alpha>
         </Combinator>
       </Expression>
       <Expression xsi:type="WorkflowOutput" />
