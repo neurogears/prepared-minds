@@ -11,3 +11,8 @@ Packages
 
 # Environments
 winpython
+
+# Media
+*.wav
+*.mp4
+*.avi
